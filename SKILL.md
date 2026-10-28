@@ -1,14 +1,14 @@
 ---
 name: app-design
 description: 高质量 App 端视觉设计。Flutter、SwiftUI（iOS）、Compose（Android）原生 UI 的视觉重塑/美化/去模板化。强调独特艺术方向、签名元素与平台原生质感，拒绝模板化 AI 风。仅做视觉层；不用于从零产品的 PRD→原型全流程（用 product-prototype-generation，全局可用）、不用于无障碍专项审计（用 accessibility）、不用于 Web 端视觉设计（用 frontend-design）。
-license: MIT-0
+license: MIT
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
   platforms: "flutter,ios,android"
-  last-updated: "2026-10-27"
+  last-updated: "2026-10-28"
 ---
 
-# App Design V1.3.0（App 端）
+# App Design V1.3.1（App 端）
 
 ## 触发条件
 - 用户要求**重塑/美化/去模板化** App 端 UI：Flutter Widget、SwiftUI View、Compose UI、iOS 设计、Android 设计、移动端原生界面
@@ -17,7 +17,7 @@ metadata:
 - **不接 PRD 流水线、后端、部署**；从零产品想法→PRD→原型 → 用 `product-prototype-generation`
 
 ## 哲学层引用（开工前必读者）
-- **执行本 Skill 前，先读取 `~/.config/opencode/design-spec/design-spec/references/ui-design-philosophy.md`**，获取设计立场、设计原则、两遍工作法、通用自检清单、输出模板与纪律。
+- **执行本 Skill 前，先读取 `~/.config/opencode/design-spec/references/ui-design-philosophy.md`**，获取设计立场、设计原则、两遍工作法、通用自检清单、输出模板与纪律。
 - 本文件只负责 **App 平台实现层**（Flutter / iOS / Android），哲学层内容不在此重复。
 
 ### 加载分层（省 token，禁止全量读取哲学层）
@@ -285,8 +285,9 @@ App 记录项 5 条（**记录项**，非硬禁令，交付时自检回填）与
 AI：涉及生成式 AI 的界面须过哲学层 §交互规范 · 生成式 AI 交互基线（标识 / 可编辑·撤销·重试 / 不可逆先确认 / 不确定标注 / 等待 / 多版本 / 隐私）；无 AI 功能则跳过。
 
 ## 维护说明
-- 版本：1.3.0（2026-10-27），哲学层共享 `design-spec/references/ui-design-philosophy.md`（配套 v2.5.0）
+- 版本：1.3.1（2026-10-28），哲学层共享 `design-spec/references/ui-design-philosophy.md`（配套 v2.5.0）
 - 锚语义：上面「配套」= 本文件内容**最后一次同步**的哲学层版本；哲学层仅兼容且未触及本文件章节时允许滞后，触及须 bump 本文件版本并同步锚（见哲学层 §维护说明；校验 `design-spec/scripts/check-design-spec.py --only anchors`）
+- v1.3.1：修正 L1 哲学层指针双前缀（`design-spec/design-spec/references/` → `design-spec/references/`，原指向不存在路径）；许可证 MIT-0 → MIT；**判据未动**，锚不变 v2.5.0
 - v1.3.0：新增 5 节（栅格与对齐 / 组件基线落地 / 跨页骨架 / 页面衔接 / 兼容与系统下限）+ 三分支自检各 3 行；L1 补 5 章路由；配套哲学层 v2.5.0
 - v1.2.15：三分支质量自检各 +1 行（表单错误态以文本 + 平台焦点 API、占位符不作标签）；配套哲学层 v2.4.14
 - v1.2.14：新增「国际化与 RTL」小节（镜像 API / 文案不写死 / 排版随语言 / 本地化格式）+ L1 路由；配套哲学层 v2.4.12
