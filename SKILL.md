@@ -3,12 +3,12 @@ name: app-design
 description: 高质量 App 端视觉设计。Flutter、SwiftUI（iOS）、Compose（Android）原生 UI 的视觉重塑/美化/去模板化。强调独特艺术方向、签名元素与平台原生质感，拒绝模板化 AI 风。仅做视觉层；不用于从零产品的 PRD→原型全流程（用 product-prototype-generation，全局可用）、不用于无障碍专项审计（用 accessibility）、不用于 Web 端视觉设计（用 frontend-design）。
 license: MIT
 metadata:
-  version: "1.3.1"
+  version: "1.6.0"
   platforms: "flutter,ios,android"
-  last-updated: "2026-10-28"
+  last-updated: "2026-11-10"
 ---
 
-# App Design V1.3.1（App 端）
+# App Design V1.6.0（App 端）
 
 ## 触发条件
 - 用户要求**重塑/美化/去模板化** App 端 UI：Flutter Widget、SwiftUI View、Compose UI、iOS 设计、Android 设计、移动端原生界面
@@ -29,6 +29,7 @@ metadata:
 - 能推断直接采用，不要追问：主题/受众/任务、技术栈（按下方检测规则）、交付形态（单屏/多屏/组件）。
 - 仅当缺失会显著跑偏时追问 1 个最关键的。
 - 推断假设在最终交付开头 `假设` 一行显式标注。
+- **步骤-1（先定标准单）**：`<WORKSPACE>` = 项目根；已有 `<WORKSPACE>/docs/design-standard.md` 直接引用；没有则先出单再画屏，标准单字段见哲学层 §两遍工作法第一遍。
 
 ## 技术栈检测（按优先级）
 1. **Flutter**：检测到 `pubspec.yaml` → Flutter 分支
@@ -101,6 +102,8 @@ metadata:
 #### 自适应布局（消费哲学层 §自适应布局）
 - 分支按**窗口尺寸类**而非机型或物理屏宽：Android `WindowSizeClass`（compact / medium / expanded，桌面另有 large / extra-large）、iOS size class（compact / regular；`horizontalSizeClass` / `traitCollection.horizontalSizeClass`）；读窗口宽用 `MediaQuery.sizeOf` / `LayoutBuilder`（Flutter）、`WindowSizeClass`（Compose）；布局分支禁用 `Build.MODEL` / `UIScreen.main.bounds` / UA 判断；窄窗与分屏下主操作不被遮挡、无横滚
 - **先选模式再画**：list-detail（主从）/ supporting pane（主 + 辅）/ feed（单列流）择一；导航形态随宽度切换（bottom bar → rail → drawer）——Compose `NavigationSuiteScaffold`（M3 Nav3）/ Flutter `NavigationRail` + `Drawer` / SwiftUI `NavigationSplitView`，**不手写尺寸分支与返回动画**；宽度到 medium 但高度 compact（横屏手机）时不做双栏
+- **尺寸类是两维，不挂在方向/机型上**：判定用宽高两个尺寸类，**不读 `UIDevice.orientation` / `Configuration.orientation` 做布局分支**；折叠内屏可能不响应方向请求（只有 bounds 变化），iOS 上按 `horizontalSizeClass` / `verticalSizeClass` 或容器 bounds 判定（Apple Tech Talk 111461）；Android 16（API 36）起 sw≥600dp 窗口忽略 `screenOrientation` / `resizeableActivity` / `min|maxAspectRatio`，别再以锁方向作为大屏策略
+- **平板不是放大的手机**：加列 / 加信息 / 加同屏任务（列表 + 详情常驻、侧栏导航），禁止把手机稿等比拉满或只做居中留白；iPadOS 26 自由窗口下 1/3–2/3 宽度不得塌陷，可在 sidebar ↔ tab bar 间变形（`NavigationSplitView` / `TabView` 的新版能力），**布局变更非破坏式**（不重建子树）
 - 大屏**加列不加字号**；Dynamic Type / Font Scale 放大时不得靠加大间距补偿（一屏两行即超限）；除显式横向画廊外，`overflow-x` 须在交付说明写出用途
 - 滚动驱动动效（`animation-timeline` 等）只作渐进增强：须在 `@supports` 内并保留无动画可读态
 
@@ -128,7 +131,7 @@ metadata:
 iOS 44×44pt / Android 7–10mm / WCAG 24×24px
 
 #### App 俗套表（消费哲学层「俗套校准表 · App」）
-Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变胶囊按钮 · Emoji 当图标（**禁用**）。Brief 明示要才用属前者。
+Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变胶囊按钮 · Emoji 当图标（**禁用**）· AI 默认 Material 紫。Brief 明示要才用属前者。
 
 ---
 
@@ -144,6 +147,7 @@ Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变
 - **Hero 动画**：`Hero` 跨屏过渡，配合 `animations` 包（`SharedAxisTransition`/`FadeThroughTransition`）承载主题叙事
 - **SharedAxis 转场**：页面切换的轴向运动，暗示信息层级
 - **CustomPainter**：自定义绘制（签名图形、分隔线、背景纹理）
+- **CustomPainter 定制插图**：按哲学层 §贴图规范 槽位生成（仅限氛围类槽位：hero/空态插画/品牌故事页/引导页，禁 emoji 当图标），回退单位按角色
 - **Haptic 反馈**：关键操作配合 `HapticFeedback`，触觉即签名
 - **Shimmer/渐变环境光**：克制的背景氛围动画
 
@@ -166,6 +170,9 @@ Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变
 - [ ] 对齐与栅格：padding 全走栅格；单对齐轴；数值列右对齐；无逐屏 magic number
 - [ ] 组件唯一：控件只有一处定义；`control-size` 与命中区合规；状态集齐（含 empty/loading/error）
 - [ ] 跨页与衔接：Scaffold 槽位一致；当前态同位；转场走系统；返回恢复状态
+- [ ] 按钮位/标准单：主 CTA 唯一常驻，层级按位序/间距/字号
+- [ ] 色号字号：标准单存在且全页同值，色号/字号/控件档未超单
+- [ ] 图标/插图：按哲学层风格生成分支（白名单生成/黑名单固定/角色级回退），16px 三判据见哲学层 §图标规范·风格生成分支
 
 ---
 
@@ -180,6 +187,7 @@ Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变
 #### 签名元素库
 - **matchedGeometryEffect**：跨视图几何过渡，承载主题叙事
 - **自定义 Shape**：签名图形/分隔线/背景纹理
+- **自定义 Shape 定制插图**：按哲学层 §贴图规范 槽位生成（仅限氛围类槽位：hero/空态插画/品牌故事页/引导页，禁 emoji）
 - **SensoryFeedback**（iOS 17+）：触觉反馈即签名
 - **Phase Animator / Keyframe**：克制的首屏/转场动画
 - **Canvas / TimelineView**：环境氛围动画
@@ -212,6 +220,9 @@ Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变
 - [ ] 对齐与栅格：padding 全走栅格；单对齐轴；数值列右对齐；无逐屏 magic number
 - [ ] 组件唯一：控件只有一处定义；`control-size` 与命中区合规；状态集齐（含 empty/loading/error）
 - [ ] 跨页与衔接：Scaffold 槽位一致；当前态同位；转场走系统；返回恢复状态
+- [ ] 按钮位/标准单：主 CTA 唯一常驻，层级按位序/间距/字号
+- [ ] 色号字号：标准单存在且全页同值，色号/字号/控件档未超单
+- [ ] 图标/插图：按哲学层风格生成分支（白名单生成/黑名单固定/角色级回退），16px 三判据见哲学层 §图标规范·风格生成分支
 
 ---
 
@@ -232,6 +243,7 @@ Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变
 #### 签名元素库
 - **AnimatedVisibility + Enter/ExitTransition**：克制的显隐动画
 - **Custom Composable + Canvas**：签名图形/分隔线/背景纹理
+- **Canvas 定制插图**：按哲学层 §贴图规范 槽位生成（仅限氛围类槽位：hero/空态插画/品牌故事页/引导页，禁 emoji）
 - **HapticFeedback**：触觉反馈即签名
 - **Shared Transition**（Compose 1.7+）：跨屏共享元素过渡
 - **InfiniteTransition**：环境氛围动画
@@ -258,6 +270,9 @@ Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变
 - [ ] 对齐与栅格：padding 全走栅格；单对齐轴；数值列右对齐；无逐屏 magic number
 - [ ] 组件唯一：控件只有一处定义；`control-size` 与命中区合规；状态集齐（含 empty/loading/error）
 - [ ] 跨页与衔接：Scaffold 槽位一致；当前态同位；转场走系统；返回恢复状态
+- [ ] 按钮位/标准单：主 CTA 唯一常驻，层级按位序/间距/字号
+- [ ] 色号字号：标准单存在且全页同值，色号/字号/控件档未超单
+- [ ] 图标/插图：按哲学层风格生成分支（白名单生成/黑名单固定/角色级回退），16px 三判据见哲学层 §图标规范·风格生成分支
 
 ---
 
@@ -285,8 +300,12 @@ App 记录项 5 条（**记录项**，非硬禁令，交付时自检回填）与
 AI：涉及生成式 AI 的界面须过哲学层 §交互规范 · 生成式 AI 交互基线（标识 / 可编辑·撤销·重试 / 不可逆先确认 / 不确定标注 / 等待 / 多版本 / 隐私）；无 AI 功能则跳过。
 
 ## 维护说明
-- 版本：1.3.1（2026-10-28），哲学层共享 `design-spec/references/ui-design-philosophy.md`（配套 v2.5.0）
+- 版本：1.6.0（2026-11-10），哲学层共享 `design-spec/references/ui-design-philosophy.md`（配套 v2.8.0）
+- v1.6.0：§自适应布局 +3 条（尺寸类两维不挂方向/机型 / 平板不是放大的手机 / 大屏加列不加字号保留）；同步哲学层 v2.8.0（Android 16 强制自适应、iPadOS 26 自由窗口）
+- v1.5.0：标准单前置（步骤-1）+ 图标/插图风格生成分支 + 按钮位自检（三分支各+1）；配套哲学层 v2.7.0
 - 锚语义：上面「配套」= 本文件内容**最后一次同步**的哲学层版本；哲学层仅兼容且未触及本文件章节时允许滞后，触及须 bump 本文件版本并同步锚（见哲学层 §维护说明；校验 `design-spec/scripts/check-design-spec.py --only anchors`）
+- v1.4.1：同步哲学层 v2.6.1（M3 Nav3 补成熟度：`1.2.x` stable，可直接作默认导航实现；本文件判据未动，仅同步锚）
+- v1.4.0：App 俗套表摘要块 +1「AI 默认 Material 紫」（权威源 §俗套校准表 · App 同步新增，`summary` 断言要求集合相等）；配套哲学层 v2.6.0
 - v1.3.1：修正 L1 哲学层指针双前缀（`design-spec/design-spec/references/` → `design-spec/references/`，原指向不存在路径）；许可证 MIT-0 → MIT；**判据未动**，锚不变 v2.5.0
 - v1.3.0：新增 5 节（栅格与对齐 / 组件基线落地 / 跨页骨架 / 页面衔接 / 兼容与系统下限）+ 三分支自检各 3 行；L1 补 5 章路由；配套哲学层 v2.5.0
 - v1.2.15：三分支质量自检各 +1 行（表单错误态以文本 + 平台焦点 API、占位符不作标签）；配套哲学层 v2.4.14
