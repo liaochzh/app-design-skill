@@ -3,12 +3,12 @@ name: app-design
 description: 高质量 App 端视觉设计。Flutter、SwiftUI（iOS）、Compose（Android）原生 UI 的视觉重塑/美化/去模板化。强调独特艺术方向、签名元素与平台原生质感，拒绝模板化 AI 风。仅做视觉层；不用于从零产品的 PRD→原型全流程（用 product-prototype-generation，全局可用）、不用于无障碍专项审计（用 accessibility）、不用于 Web 端视觉设计（用 frontend-design）。
 license: MIT
 metadata:
-  version: "1.6.0"
+  version: "1.7.0"
   platforms: "flutter,ios,android"
-  last-updated: "2026-11-10"
+  last-updated: "2026-11-11"
 ---
 
-# App Design V1.6.0（App 端）
+# App Design V1.7.0（App 端）
 
 ## 触发条件
 - 用户要求**重塑/美化/去模板化** App 端 UI：Flutter Widget、SwiftUI View、Compose UI、iOS 设计、Android 设计、移动端原生界面
@@ -109,6 +109,7 @@ metadata:
 
 #### 形态与共存（消费哲学层 §形态与共存）
 - 键盘与安全区：Android 用 `WindowInsets.safeDrawing` / `imePadding` + `android:windowSoftInputMode="adjustResize"`（edge-to-edge 自 targetSdk 35 强制）；iOS 用 `keyboardLayoutGuide`（`followsUndockedKeyboard` 自 iOS 15；`usesBottomSafeArea` 自 iOS 17）；Flutter 用 `viewInsets` 收键盘
+- **安全区逐边读取，不从一侧推另一侧**：四边独立取（`WindowInsets` 各边 / `safeAreaInsets`），折叠机外屏竖持是「右栏 + 底手势条」、内屏竖持是「顶栏 + 底手势条」，两侧数值不对称；侧栏换边时只改避让，不反转内容顺序（数值 owner 见 `product-prototype-generation/constants.js`）
 - 折叠按姿态：Compose Material 3 Adaptive `collectFoldingFeaturesAsState()` + `FoldingFeature`（`state` / `orientation` / `isSeparating` / `bounds`）；**无铰链角度**，不写角度分支
 - 形态重建保状态：Compose `rememberSaveable`、Flutter `PageStorageKey` / `RestorationMixin`、SwiftUI `@SceneStorage`；旋转/分屏/折叠后不重放首屏动画
 - 输入：hover / 笔不承载唯一反馈；无指针设备的关键操作与焦点按 `accessibility/platforms/*` 判定
@@ -205,6 +206,7 @@ Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变
 - 分栏用 `NavigationSplitView`（或 `UISplitViewController`）：内屏常规宽走列表-详情，外屏 compact 回单栏；尺寸类别与机型禁令见「跨端系统落地」小节，不在此重述
 - 折痕避让：优先系统组件（sheet / alert / contextMenu / split view 自动让位）；自定义锚定控件用 `ReservedRegion`（iOS 27.1+，以 SDK 为准），不写死铰链宽度、不自绘遮罩
 - 跨折痕网格用偶数列 + 外层边距；跨折痕连续内容保持连续滚动（后者为本仓引申，依据见哲学层 §iPhone Duo 的归因行）
+- **系统栏竖排在持握侧**：外屏竖持时状态栏 / 灵动岛 / TabBar / toolbar 同处一条侧栏，横持随持握侧换边、内屏竖持无侧栏（哲学层 §Apple · iPhone Duo）。内容按 `safeAreaInsets` **逐边**避让，不写死右侧留白、不按机型判断栏在哪边；侧栏是系统保留区，不放自有控件 / 浮层
 - 内屏被 Split View 分成两半时按当前可用宽度降级布局，不假设恒为双栏
 
 #### SwiftUI 质量自检（在哲学层通用清单之上）
@@ -217,6 +219,7 @@ Expressive 形状滥用 · Liquid Glass 用在内容层（**禁用**）· 渐变
 - [ ] 安全区：`.safeAreaInset` / `.ignoresSafeArea` 正确处理
 - [ ] SF Symbols：渲染模式显式且同界面单一，状态变化仍走填充度
 - [ ] 折叠：无机型判断、无写死折痕宽度；开合与内屏半宽态下分栏不溢出、选中 / 滚动位置不丢
+- [ ] 竖排系统栏：外屏竖持时按 `safeAreaInsets` 逐边避让侧栏、无写死右侧留白；侧栏内无自有控件 / 浮层（哲学层 §Apple · iPhone Duo）
 - [ ] 对齐与栅格：padding 全走栅格；单对齐轴；数值列右对齐；无逐屏 magic number
 - [ ] 组件唯一：控件只有一处定义；`control-size` 与命中区合规；状态集齐（含 empty/loading/error）
 - [ ] 跨页与衔接：Scaffold 槽位一致；当前态同位；转场走系统；返回恢复状态
@@ -300,7 +303,8 @@ App 记录项 5 条（**记录项**，非硬禁令，交付时自检回填）与
 AI：涉及生成式 AI 的界面须过哲学层 §交互规范 · 生成式 AI 交互基线（标识 / 可编辑·撤销·重试 / 不可逆先确认 / 不确定标注 / 等待 / 多版本 / 隐私）；无 AI 功能则跳过。
 
 ## 维护说明
-- 版本：1.6.0（2026-11-10），哲学层共享 `design-spec/references/ui-design-philosophy.md`（配套 v2.8.0）
+- 版本：1.7.0（2026-11-11），哲学层共享 `design-spec/references/ui-design-philosophy.md`（配套 v2.9.0）
+- v1.7.0：折叠（Duo）补「系统栏竖排在持握侧」条（外屏竖持侧栏 = 状态栏 + 灵动岛 + TabBar + toolbar，横持换边、内屏竖持无侧栏；逐边避让、不写死右侧留白、侧栏为系统保留区）；形态与共存补「安全区逐边读取，不从一侧推另一侧」；SwiftUI 自检 +1（竖排系统栏）；同步哲学层 v2.9.0
 - v1.6.0：§自适应布局 +3 条（尺寸类两维不挂方向/机型 / 平板不是放大的手机 / 大屏加列不加字号保留）；同步哲学层 v2.8.0（Android 16 强制自适应、iPadOS 26 自由窗口）
 - v1.5.0：标准单前置（步骤-1）+ 图标/插图风格生成分支 + 按钮位自检（三分支各+1）；配套哲学层 v2.7.0
 - 锚语义：上面「配套」= 本文件内容**最后一次同步**的哲学层版本；哲学层仅兼容且未触及本文件章节时允许滞后，触及须 bump 本文件版本并同步锚（见哲学层 §维护说明；校验 `design-spec/scripts/check-design-spec.py --only anchors`）
